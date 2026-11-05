@@ -24,6 +24,7 @@ services:
       PUBLIC_BASE_URL: http://${LAN_IP}:8081
       OTA_SIGNING_SECRET_FILE: /run/secrets/ota_secret
       SMARTWALL_ADMIN_PASSWORD_FILE: /run/secrets/admin_password
+      SMARTWALL_SECURE_COOKIES: ${SMARTWALL_SECURE_COOKIES:-false}
       SMARTWALL_ALLOWED_ORIGINS: ${SMARTWALL_ALLOWED_ORIGINS:-}
       FIRMWARE_PUBLIC_KEY_FILE: /run/secrets/publisher.pem
       AUTO_UPDATE_FIRMWARE: ${AUTO_UPDATE_FIRMWARE:-false}

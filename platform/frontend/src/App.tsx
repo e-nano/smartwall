@@ -1,3 +1,4 @@
+import { LocalAccountBoundary } from "./components/LocalAccount";
 import { componentCategoryPath } from "./categoryPaths";
 import { GoodsInView } from "./views/GoodsInView";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
@@ -466,7 +467,7 @@ export function App() {
       }}
     >
       <AntApp>
-        <SmartWallApplication />
+        <LocalAccountBoundary><SmartWallApplication /></LocalAccountBoundary>
       </AntApp>
     </ConfigProvider>
   );

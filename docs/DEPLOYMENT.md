@@ -30,13 +30,24 @@ sudo docker compose --project-directory /opt/smartwall up -d
 The installer verifies the signed release and pins the image digest. It refuses to
 overwrite an existing installation. It generates separate admin, MQTT and firmware
 URL secrets. Data, firmware, requests and configuration persist under `/opt/smartwall`.
-The interface defaults to `http://127.0.0.1:8080`; sign in as `admin` using the password
-in `runtime/secrets/admin_password`. An SSH tunnel can provide remote administration.
-For LAN/browser access use an HTTPS reverse proxy, set its origin in
-`SMARTWALL_ALLOWED_ORIGINS`, and retain the loopback backend. HTTP Basic authentication
-must be carried over HTTPS or a trusted local SSH tunnel. Do not publish port 8080
-unencrypted to the internet. The edge administrator has full local access; cloud
-company/user roles continue to apply independently in the online portal.
+The interface defaults to `http://127.0.0.1:8080`. On the first visit, enter the
+installer's setup code from `runtime/secrets/admin_password`, then choose your own
+username and password (at least 12 characters). Existing Basic-auth installations
+use the same file as their initial setup code. Once setup is complete, the code
+cannot sign in or replace the account.
+
+Subsequent visits show the normal sign-in page. The account menu provides password
+and username changes and sign-out. Passwords are salted and scrypt-hashed; sessions
+expire after eight hours and use HttpOnly, SameSite cookies. Password changes revoke
+all earlier sessions. Account data stays in local SQLite and is excluded from the
+inventory sync outbox. Local database backups include account hashes and must be
+kept private. Restoring a backup also restores its account state.
+
+An SSH tunnel can provide remote administration. For LAN/browser access use an
+HTTPS reverse proxy, set its origin in `SMARTWALL_ALLOWED_ORIGINS`, set
+`SMARTWALL_SECURE_COOKIES=true`, and retain the loopback backend. Do not publish port
+8080 unencrypted to the internet. The local administrator has full local access;
+cloud company/user roles continue to apply independently in the online portal.
 
 MQTT (1883), firmware HTTP downloads (8081) and discovery (UDP 4210) are LAN services.
 Firewall them to the workshop subnet. Firmware authenticity comes from a device-verified

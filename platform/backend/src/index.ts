@@ -1,5 +1,5 @@
-import { maintenanceMode } from "./local-access.js";
 import "dotenv/config";
+import { maintenanceMode } from "./local-access.js";
 import { startAutomaticFirmwareUpdates } from "./automatic-updates.js";
 import { startCloudSync, remoteCommandConnection } from "./cloud-sync.js";
 import { startRemoteCommands } from "./remote-commands.js";

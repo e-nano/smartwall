@@ -1,3 +1,4 @@
+import { LocalAccountMenu } from "./LocalAccount";
 import { RemoteAccessSettings } from "./RemoteAccessSettings";
 import { ConnectWallModal } from "./ConnectWallModal";
 import { useState, type ReactNode, type RefObject } from "react";
@@ -183,6 +184,7 @@ export function AppShell({
                 </Badge>
               </Popover>
               <Button size="large" icon={<RefreshCw size={20} />} onClick={onRefresh} aria-label="Refresh" />
+              <LocalAccountMenu />
             </Flex>
           </Flex>
         </Header>

@@ -1,5 +1,6 @@
+import { localAuthRouter } from './local-auth.js';
 import { releasesRouter } from "./releases.js";
-import { localAccess, validateLocalAccess, maintenanceMode } from "./local-access.js";
+import { localAccess, localRequestGuard, validateLocalAccess, maintenanceMode } from "./local-access.js";
 import { importFirmware } from "./firmware-import.js";
 import { assertCompatible, type FirmwareMetadata } from "../../shared/releases.js";
 import { componentSchema, componentImagesSchema, categoryPathSchema } from "../../shared/component-schema.js";
@@ -55,8 +56,10 @@ api.get("/health/ready", (_request, response) => {
     response.json({ ok: true, maintenance: maintenanceMode(), version: process.env.SMARTWALL_VERSION ?? "development" });
   } catch { response.status(503).json({ ok: false }); }
 });
-api.use(localAccess);
+api.use(localRequestGuard);
 api.use(express.json({ limit: "1mb" }));
+api.use("/api/auth", localAuthRouter());
+api.use(localAccess);
 api.use("/api/goods-in", createGoodsInRouter());
 api.use("/api/releases", releasesRouter());
 api.use("/api", (_request, response, next) => {

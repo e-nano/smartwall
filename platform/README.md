@@ -47,7 +47,10 @@ local bins without credentials by default so commissioning only requires Wi-Fi.
    npm run dev
    ```
 
-5. Open `http://127.0.0.1:5173`.
+5. Open `http://127.0.0.1:5173`. When an administrator setup code is configured,
+   use it once to choose your username and password. The account menu lets you
+   change credentials and sign out. Loopback-only development without a configured
+   code retains the existing direct-access mode.
 6. Scan the e-ink Wi-Fi QR code to join a new bin's setup network, then select
    the workshop Wi-Fi and enter its password. MQTT host and
    credential fields are under Advanced settings for manual fallback or when

@@ -45,5 +45,5 @@ config['public_key']=str(root/'runtime/secrets/publisher.pem')
 content=f'SMARTWALL_IMAGE={release["image"]}\nLAN_IP={address}\nHTTP_HOST=127.0.0.1\nSMARTWALL_RELEASE_URL={args.release_url}\nAUTO_UPDATE_FIRMWARE=false\n'
 (root/'.env').write_text(content); os.chmod(root/'.env',0o600)
 print(f'Installation prepared at {root}. Start with: sudo docker compose --project-directory {root} up -d')
-print(f'Administrator username: admin. Password is stored in {root}/runtime/secrets/admin_password')
+print(f'Open the local interface to create your administrator account. Setup code: {root}/runtime/secrets/admin_password')
 print('The optional supervisor timer can now be installed using the supplied systemd units.')

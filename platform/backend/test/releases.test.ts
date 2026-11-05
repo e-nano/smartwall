@@ -18,7 +18,9 @@ const {api}=await import('../src/server.js');
 const {db,upsertStatus,getBinHardware}=await import('../src/db.js');
 const server=api.listen(0,'127.0.0.1');await new Promise<void>(r=>server.once('listening',r));
 const address=server.address(); assert(address && typeof address!=='string');const base=`http://127.0.0.1:${address.port}`;
-const authorization='Basic '+Buffer.from('admin:'+process.env.SMARTWALL_ADMIN_PASSWORD).toString('base64');
+const setup=await fetch(base+'/api/auth/setup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({setupCode:process.env.SMARTWALL_ADMIN_PASSWORD,username:'release-tester',password:'local-test-password-2026'})});
+assert.equal(setup.status,200);const session=await setup.json();
+const authenticatedHeaders={cookie:setup.headers.get('set-cookie')!.split(';')[0]!, 'x-csrf-token':session.csrfToken};
 after(async()=>{await new Promise<void>(r=>server.close(()=>r()));db.close();rmSync(dir,{recursive:true,force:true});});
 function artifact(target='esp32-devkit', layout='default-4mb-v1') {
   const bytes=Buffer.alloc(512);bytes[0]=0xe9;bytes.writeUInt16LE(target==='esp32-devkit'?0:9,12);
@@ -53,28 +55,28 @@ test('legacy migration preserves firmware references and isolates unknown target
 test('protected API rejects anonymous and cross-origin mutations',async()=>{
   assert.equal((await fetch(base+'/api/firmware')).status,401);
   assert.equal((await fetch(base+'/health/live')).status,200);
-  assert.equal((await fetch(base+'/api/mqtt/security',{method:'PATCH',headers:{authorization,Origin:'https://attacker.example','Content-Type':'application/json'},body:JSON.stringify({credentialsRequired:false})})).status,403);
+  assert.equal((await fetch(base+'/api/mqtt/security',{method:'PATCH',headers:{...authenticatedHeaders,Origin:'https://attacker.example','Content-Type':'application/json'},body:JSON.stringify({credentialsRequired:false})})).status,403);
 });
 test('signed uploads support two hardware builds per version; mismatches fail before MQTT',async()=>{
   const records=[];
   for (const target of ['esp32-devkit','smartbin-rev02-s3']) {
     const {m,bytes}=artifact(target,target==='esp32-devkit'?'default-4mb-v1':'default-8mb-v1');
     const form=new FormData();form.append('manifest',JSON.stringify(m));form.append('firmware',new Blob([new Uint8Array(bytes)]),'firmware.bin');
-    const response=await fetch(base+'/api/firmware',{method:'POST',headers:{authorization},body:form});
+    const response=await fetch(base+'/api/firmware',{method:'POST',headers:authenticatedHeaders,body:form});
     assert.equal(response.status,201,await response.clone().text());records.push(await response.json());
   }
   upsertStatus({binId:'devkit',online:true,firmwareVersion:'1.0.0',hardwareTarget:'esp32-devkit',partitionLayout:'default-4mb-v1'});
   assert.equal(getBinHardware('devkit')?.hardware_target,'esp32-devkit');
-  const response=await fetch(base+`/api/firmware/${records[1].firmware_id}/deploy`,{method:'POST',headers:{authorization,'Content-Type':'application/json'},body:JSON.stringify({target:'selected',binIds:['devkit']})});
+  const response=await fetch(base+`/api/firmware/${records[1].firmware_id}/deploy`,{method:'POST',headers:{...authenticatedHeaders,'Content-Type':'application/json'},body:JSON.stringify({target:'selected',binIds:['devkit']})});
   assert.equal(response.status,409);
-  const none=await fetch(base+`/api/firmware/${records[1].firmware_id}/deploy`,{method:'POST',headers:{authorization,'Content-Type':'application/json'},body:JSON.stringify({target:'all'})});
+  const none=await fetch(base+`/api/firmware/${records[1].firmware_id}/deploy`,{method:'POST',headers:{...authenticatedHeaders,'Content-Type':'application/json'},body:JSON.stringify({target:'all'})});
   assert.equal(none.status,400);
 });
 
 test('maintenance rejects writes until validation is complete',async()=>{
   const marker=join(dir,'maintenance');process.env.MAINTENANCE_FILE=marker;writeFileSync(marker,'');
-  const response=await fetch(base+'/api/mqtt/security',{method:'PATCH',headers:{authorization,'Content-Type':'application/json'},body:JSON.stringify({credentialsRequired:false})});
+  const response=await fetch(base+'/api/mqtt/security',{method:'PATCH',headers:{...authenticatedHeaders,'Content-Type':'application/json'},body:JSON.stringify({credentialsRequired:false})});
   assert.equal(response.status,503);assert.equal((await fetch(base+'/health/ready')).status,200);
   rmSync(marker);delete process.env.MAINTENANCE_FILE;
-  assert.equal((await fetch(base+'/api/firmware',{headers:{authorization}})).status,200);
+  assert.equal((await fetch(base+'/api/firmware',{headers:authenticatedHeaders})).status,200);
 });
