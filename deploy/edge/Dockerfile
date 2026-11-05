@@ -1,4 +1,4 @@
-FROM node:24-bookworm-slim AS build
+FROM node:25-bookworm-slim AS build
 WORKDIR /app
 COPY platform/package.json platform/package-lock.json ./
 RUN npm ci
@@ -7,7 +7,7 @@ COPY platform/frontend ./frontend
 COPY platform/shared ./shared
 RUN ./node_modules/.bin/tsc -p backend/tsconfig.json && ./node_modules/.bin/vite build --config frontend/vite.config.ts
 
-FROM node:24-bookworm-slim AS runtime
+FROM node:25-bookworm-slim AS runtime
 ARG VERSION=development
 ENV NODE_ENV=production SMARTWALL_VERSION=$VERSION DATA_DIR=/var/lib/smartwall/data FIRMWARE_DIR=/var/lib/smartwall/firmware FRONTEND_DIR=/app/frontend/dist
 WORKDIR /app
