@@ -1,0 +1,15 @@
+[Unit]
+Description=Verify and apply approved SmartWall releases
+After=docker.service network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/smartwall/supervisor/supervisor.py --directory /opt/smartwall
+TimeoutStartSec=30min
+UMask=0077
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/smartwall

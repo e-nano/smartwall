@@ -1,0 +1,43 @@
+{
+  "name": "smartwall-platform",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,green \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "tsx backend/src/index.ts",
+    "dev:web": "vite --host 0.0.0.0 --config frontend/vite.config.ts",
+    "typecheck": "tsc -p backend/tsconfig.json --noEmit && tsc -p frontend/tsconfig.json --noEmit",
+    "build": "tsc -p backend/tsconfig.json && vite build --config frontend/vite.config.ts",
+    "start": "node backend/dist/index.js"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "^8.2.0",
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "antd": "^6.6.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "lucide-react": "^0.468.0",
+    "mqtt": "^5.10.3",
+    "multer": "^2.0.2",
+    "nodemailer": "^10.0.15",
+    "pg": "^8.13.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.10.5",
+    "@types/nodemailer": "^8.0.2",
+    "@types/pg": "^8.11.10",
+    "@types/react": "^19.0.3",
+    "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7"
+  }
+}

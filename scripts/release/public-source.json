@@ -1,0 +1,35 @@
+{
+  "files": [
+    "README.md", "CONTRIBUTING.md", "SECURITY.md", "LICENSE",
+    ".gitignore", ".dockerignore", ".firmware-version", "platformio.ini",
+    ".github/dependabot.yml", ".github/pull_request_template.md",
+    ".github/workflows/checks.yml", ".github/workflows/release.yml",
+    "docs/DEPLOYMENT.md", "docs/RELEASING.md", "docs/backend-api.md",
+    "scripts/compile-firmware.sh", "scripts/compile-devkit-firmware.sh",
+    "scripts/release/build_metadata.py", "scripts/release/publish-metadata.mjs",
+    "scripts/release/publication-audit.py", "scripts/release/public_source.py",
+    "scripts/release/export-public.py", "scripts/release/public-source.json",
+    "platform/package.json", "platform/package-lock.json", "platform/README.md",
+    "platform/GOODS_IN.md", "platform/.env.example", "platform/.gitignore",
+    "platform/.dockerignore", "platform/docker-compose.yml",
+    "platform/backend/tsconfig.json", "platform/frontend/tsconfig.json",
+    "platform/frontend/index.html", "platform/frontend/vite.config.ts",
+    "platform/frontend/public/assets/e-nano-logo.svg",
+    "platform/infra/mosquitto.conf", "platform/infra/mosquitto-auth.conf",
+    "platform/scripts/start-mqtt.sh", "platform/scripts/decrypt-backup.mjs",
+    "platform/deploy/systemd/smartwall-platform.service.example",
+    "platform/plugins/smartwall/plugin.json", "platform/plugins/smartwall/mcp.json"
+  ],
+  "trees": {
+    "src": [".cpp", ".h"],
+    "include": [".h"],
+    "platform/backend/src": [".ts"],
+    "platform/backend/test": [".ts"],
+    "platform/frontend/src": [".ts", ".tsx", ".css"],
+    "platform/frontend/test": [".ts"],
+    "platform/shared": [".js", ".ts"],
+    "deploy/edge": [".yaml", ".sh", "Dockerfile"],
+    "deploy/supervisor": [".py", ".service", ".timer"],
+    "deploy/tests": [".py"]
+  }
+}

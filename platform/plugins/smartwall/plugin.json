@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "smartwall",
+  "version": "0.1.0",
+  "description": "Check company inventory, guide physical bins, and add supplier components and images to selected SmartWalls.",
+  "author": { "name": "E-Nano" },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "SmartWall",
+        "shortDescription": "Inventory and component catalogue for your SmartWalls."
+      }
+    }
+  }
+}

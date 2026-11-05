@@ -1,0 +1,22 @@
+**/.git
+**/node_modules
+**/.env
+**/.env.*
+**/data
+**/firmware
+**/.pio
+**/dist
+**/*credentials*
+**/*.pem
+**/*.key
+**/*.db*
+**/*.log
+**/runtime
+
+# Local images must never receive the private hosted service build context.
+platform/cloud-backend
+platform/infra/gcp
+platform/cloudbuild*.yaml
+platform/deploy/configure-invitation-email.py
+assets
+public-export

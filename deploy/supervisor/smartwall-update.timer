@@ -1,0 +1,8 @@
+[Unit]
+Description=Check SmartWall update requests
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=1min
+Persistent=true
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,12 @@
+node_modules
+.env
+.env.*
+data
+firmware
+backend/dist
+cloud-backend/dist
+frontend/dist
+**/*credentials*
+**/*.pem
+**/*.key
+infra

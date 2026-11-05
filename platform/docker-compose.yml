@@ -1,0 +1,27 @@
+services:
+  mqtt:
+    image: eclipse-mosquitto:2
+    container_name: smartwall-mqtt
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    environment:
+      MQTT_USERNAME: ${MQTT_USERNAME:?Set MQTT_USERNAME in .env}
+      MQTT_PASSWORD: ${MQTT_PASSWORD:?Set MQTT_PASSWORD in .env}
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >-
+        mosquitto_passwd -b -c /tmp/smartwall-passwd "$$MQTT_USERNAME" "$$MQTT_PASSWORD" &&
+        chown mosquitto:mosquitto /tmp/smartwall-passwd /mosquitto/data &&
+        chmod 600 /tmp/smartwall-passwd &&
+        config=/mosquitto/config/mosquitto-open.conf &&
+        if [ -f /smartwall-auth/require-credentials ]; then config=/mosquitto/config/mosquitto-auth.conf; fi &&
+        exec mosquitto -c "$$config"
+    volumes:
+      - ./infra/mosquitto.conf:/mosquitto/config/mosquitto-open.conf:ro
+      - ./infra/mosquitto-auth.conf:/mosquitto/config/mosquitto-auth.conf:ro
+      - ./data/mqtt:/smartwall-auth:ro
+      - mqtt-data:/mosquitto/data
+
+volumes:
+  mqtt-data:

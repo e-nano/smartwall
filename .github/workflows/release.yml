@@ -1,0 +1,141 @@
+name: Official release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+concurrency:
+  group: official-release
+  cancel-in-progress: false
+jobs:
+  approval:
+    # Publication stays disabled until the owner configures required reviewers,
+    # tag protection and secrets using docs/RELEASING.md.
+    if: vars.OFFICIAL_RELEASES_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: official-release
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - run: python3 scripts/release/publication-audit.py
+      - id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.-]+)?$ ]]
+          git merge-base --is-ancestor HEAD origin/main
+          printf 'version=%s\n' "$version" >> "$GITHUB_OUTPUT"
+  firmware:
+    needs: approval
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - board: elegoo_esp32
+            target: esp32-devkit
+          - board: smartbin_integrated_rev02
+            target: smartbin-rev02-s3
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - run: python3 scripts/release/publication-audit.py
+      - run: pip install platformio==6.1.18
+      - name: Build with the public verification key
+        env:
+          PUBLIC_KEY: ${{ vars.FIRMWARE_PUBLIC_KEY_PEM }}
+          SMARTWALL_RELEASE_VERSION: ${{ needs.approval.outputs.version }}
+          BOARD: ${{ matrix.board }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          test -n "$PUBLIC_KEY"
+          printf '%s\n' "$PUBLIC_KEY" > "$RUNNER_TEMP/publisher.pem"
+          export SMARTWALL_FIRMWARE_PUBLIC_KEY_FILE="$RUNNER_TEMP/publisher.pem"
+          pio run -e "$BOARD"
+          mkdir -p release
+          cp ".pio/build/$BOARD/firmware.bin" "release/$TARGET.bin"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: firmware-${{ matrix.target }}
+          path: release/*.bin
+  validate:
+    needs: approval
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - run: python3 scripts/release/publication-audit.py
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: npm ci
+        working-directory: platform
+      - run: npm run typecheck
+        working-directory: platform
+      - run: node --import tsx --test backend/test/*.test.ts frontend/test/*.test.ts
+        working-directory: platform
+      - run: python3 -m unittest discover -s deploy/tests -v
+  publish:
+    needs: [approval, firmware, validate]
+    runs-on: ubuntu-latest
+    environment: official-release
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - run: python3 scripts/release/publication-audit.py
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: firmware-*
+          path: release
+          merge-multiple: true
+      - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: image
+        env:
+          REPOSITORY: ${{ github.repository }}
+        run: echo "name=ghcr.io/${REPOSITORY,,}/edge" >> "$GITHUB_OUTPUT"
+      - id: build
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          file: deploy/edge/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.image.outputs.name }}:${{ needs.approval.outputs.version }}
+          build-args: VERSION=${{ needs.approval.outputs.version }}
+          provenance: true
+          sbom: true
+      - name: Sign release and firmware metadata
+        env:
+          SIGNING_KEY: ${{ secrets.RELEASE_SIGNING_KEY_PEM }}
+          PUBLIC_KEY: ${{ vars.FIRMWARE_PUBLIC_KEY_PEM }}
+          VERSION: ${{ needs.approval.outputs.version }}
+          IMAGE: ${{ steps.image.outputs.name }}@${{ steps.build.outputs.digest }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          umask 077
+          export RELEASE_SIGNING_KEY_FILE="$RUNNER_TEMP/release-signing.pem"
+          export FIRMWARE_PUBLIC_KEY_FILE="$RUNNER_TEMP/publisher.pem"
+          trap 'rm -f "$RELEASE_SIGNING_KEY_FILE"' EXIT
+          printf '%s\n' "$SIGNING_KEY" > "$RELEASE_SIGNING_KEY_FILE"
+          printf '%s\n' "$PUBLIC_KEY" > "$FIRMWARE_PUBLIC_KEY_FILE"
+          node scripts/release/publish-metadata.mjs "$VERSION" "$REPOSITORY" "$IMAGE"
+      - name: Publish immutable version assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.approval.outputs.version }}
+        run: |
+          flags=()
+          if [[ "$VERSION" == *-* ]]; then flags+=(--prerelease); fi
+          gh release create "v$VERSION" --verify-tag --generate-notes "${flags[@]}" release/release.json release/release.json.sig release/publisher.pem release/smartwall-*.bin release/smartwall-*.json

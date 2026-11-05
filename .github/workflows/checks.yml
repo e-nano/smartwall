@@ -1,0 +1,37 @@
+name: Checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  platform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - run: python3 scripts/release/publication-audit.py --source-only
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: platform/package-lock.json
+      - run: npm ci
+        working-directory: platform
+      - run: npm run typecheck
+        working-directory: platform
+      - run: node --import tsx --test backend/test/*.test.ts frontend/test/*.test.ts
+        working-directory: platform
+      - run: python3 -m unittest discover -s deploy/tests -v
+  firmware:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        board: [elegoo_esp32, smartbin_integrated_rev02]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - run: python3 scripts/release/publication-audit.py --source-only
+      - run: pip install platformio==6.1.18
+      - run: pio run -e "$BOARD"
+        env:
+          BOARD: ${{ matrix.board }}

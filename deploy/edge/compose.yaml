@@ -1,0 +1,58 @@
+# Linux edge deployment. Discovery shares host networking so UDP broadcast replies
+# use the same LAN address as the published broker. Default UI is loopback-only.
+name: smartwall
+services:
+  smartwall:
+    image: ${SMARTWALL_IMAGE:?Set a verified image digest using the installer}
+    network_mode: host
+    restart: unless-stopped
+    init: true
+    user: "1000:1000"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: [/tmp]
+    environment:
+      HTTP_HOST: ${HTTP_HOST:-127.0.0.1}
+      PORT: "8080"
+      FIRMWARE_PORT: "8081"
+      FIRMWARE_HOST: ${LAN_IP:?Set the LAN address bins can reach}
+      SMARTWALL_DISCOVERY_HOST: "0.0.0.0"
+      MQTT_URL: mqtt://127.0.0.1:1883
+      MQTT_USERNAME: smartwall
+      MQTT_PASSWORD_FILE: /run/secrets/mqtt_password
+      PUBLIC_BASE_URL: http://${LAN_IP}:8081
+      OTA_SIGNING_SECRET_FILE: /run/secrets/ota_secret
+      SMARTWALL_ADMIN_PASSWORD_FILE: /run/secrets/admin_password
+      SMARTWALL_ALLOWED_ORIGINS: ${SMARTWALL_ALLOWED_ORIGINS:-}
+      FIRMWARE_PUBLIC_KEY_FILE: /run/secrets/publisher.pem
+      AUTO_UPDATE_FIRMWARE: ${AUTO_UPDATE_FIRMWARE:-false}
+      MAINTENANCE_FILE: /run/smartwall-control/maintenance
+      RELEASE_STATUS_FILE: /run/smartwall-control/status.json
+      RELEASE_REQUEST_DIR: /var/lib/smartwall/requests
+      SMARTWALL_RELEASE_URL: ${SMARTWALL_RELEASE_URL:-}
+    volumes:
+      - ./runtime/data:/var/lib/smartwall/data
+      - ./runtime/firmware:/var/lib/smartwall/firmware
+      - ./runtime/requests:/var/lib/smartwall/requests
+      - ./runtime/control:/run/smartwall-control:ro
+      - ./runtime/secrets:/run/secrets:ro
+  mqtt:
+    image: eclipse-mosquitto:2.0.22
+    restart: unless-stopped
+    ports:
+      - "${LAN_IP}:1883:1883"
+      - "127.0.0.1:1883:1883"
+    entrypoint: ["/bin/sh", "/smartwall/broker.sh"]
+    volumes:
+      - ./broker.sh:/smartwall/broker.sh:ro
+      - ./runtime/data/mqtt:/smartwall-auth:ro
+      - ./runtime/secrets/mqtt_password:/run/secrets/mqtt_password:ro
+      - mqtt-data:/mosquitto/data
+    healthcheck:
+      test: [CMD-SHELL, 'kill -0 "$$(cat /tmp/mosquitto.pid)"']
+      interval: 15s
+      timeout: 5s
+      retries: 3
+volumes:
+  mqtt-data:

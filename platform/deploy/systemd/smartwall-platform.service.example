@@ -1,0 +1,18 @@
+[Unit]
+Description=SmartWall operator platform
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=smartwall
+WorkingDirectory=/opt/smartwall-source/platform
+EnvironmentFile=/opt/smartwall-source/platform/.env
+ExecStart=/usr/bin/node /opt/smartwall-source/platform/backend/dist/index.js
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
