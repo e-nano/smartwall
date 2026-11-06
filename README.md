@@ -1,6 +1,7 @@
 # SmartWall — local inventory and SmartBin firmware
 
-Deployment and release preparation is now included: [Docker installation and updates](docs/DEPLOYMENT.md),
+Start with the [SmartWall user guide](https://smartwall.e-nano.io/guide.html),
+[Docker source trial and installation](docs/DEPLOYMENT.md),
 [official release approvals](docs/RELEASING.md), [contributing](CONTRIBUTING.md), and [security](SECURITY.md).
 The community project covers the local operator interface, backend, bin firmware and
 approved software/firmware updates. E-Nano runs the optional commercial

@@ -5,7 +5,70 @@ the optional commercial [SmartWall Online](https://smartwall.e-nano.io) service.
 Its source and deployment are private; no online portal server is distributed here.
 Keep an edge installation on each workshop LAN for UDP bin discovery.
 
-## Local installation (Linux AMD64 / ARM64)
+## Start here
+
+The [SmartWall guide](https://smartwall.e-nano.io/guide.html) covers installation,
+first login, bin setup, daily operation and optional online/ChatGPT connections.
+The public repository contains the local software and bin firmware. SmartWall
+Online is hosted by E-Nano and is not included in the Docker installation.
+
+The source is available today. There is **no approved signed release yet**; the
+official installer below needs published release assets and a verified publisher
+key. Licence selection is still pending. Source availability does not grant an
+open-source licence. Maintainers and authorized evaluators can use the source
+trial below; check the repository's licence status before reuse or redistribution.
+
+## Source trial (available now)
+
+Use a Linux host with Docker Engine, Compose v2, Git and Python 3. Reserve its LAN
+IPv4 address and keep it on the same network as your bins. Start with an empty
+installation: these commands do not import an existing wall or connect to cloud.
+The container builds the frontend; no host Node.js installation is needed.
+
+```sh
+git clone https://github.com/e-nano/smartwall.git
+cd smartwall
+git rev-parse HEAD # Record the source revision you are evaluating.
+sudo docker build -f deploy/edge/Dockerfile \
+  --build-arg VERSION=source-trial -t smartwall-edge:source-trial .
+# Replace this example with the host's LAN IPv4 address.
+sudo python3 deploy/edge/prepare-source.py \
+  --directory /opt/smartwall-preview --lan-ip 192.168.1.10
+sudo docker compose --project-directory /opt/smartwall-preview up -d
+sudo docker compose --project-directory /opt/smartwall-preview ps
+sudo cat /opt/smartwall-preview/runtime/secrets/admin_password
+```
+
+On that host, open `http://127.0.0.1:8080`. Use the displayed setup code once and
+choose your own username and password. Keep the code private. The preparation
+script refuses an existing destination and assigns persistent files to container
+UID 1000. Stop an old SmartWall backend/MQTT broker first if it occupies ports
+1883, 8080, 8081 or UDP 4210; do not delete its data or containers.
+
+The source trial has no publisher key, signed update feed or privileged supervisor.
+Software updates and firmware uploads/OTA are unavailable until trusted release
+configuration is installed. Existing bins can still connect, report stock and
+receive normal operator commands. Do not flash a development image over a working
+bin just to try the operator interface.
+
+On a headless host, use `ssh -L 8080:127.0.0.1:8080 USER@HOST` and open the same URL
+on your computer. Back up a stopped trial before changing source/image versions:
+
+```sh
+sudo docker compose --project-directory /opt/smartwall-preview stop
+sudo tar -C /opt -czf /root/smartwall-preview-backup-$(date -u +%Y%m%dT%H%M%SZ).tgz smartwall-preview
+sudo docker compose --project-directory /opt/smartwall-preview start
+```
+
+Keep the backup private: it contains inventory, credentials and account hashes.
+To update a trial manually, first make this backup, review/pull the new source,
+build it under a **new** image tag and version, and change only `SMARTWALL_IMAGE`
+in `/opt/smartwall-preview/.env`. Run Compose `up -d` and check `/health/ready`.
+Keep the old image. A rollback after a schema change needs the matching database
+backup; do not simply start old code against a migrated database. Restore into a
+separate stopped directory and verify before replacing a working installation.
+
+## Approved release installation (Linux AMD64 / ARM64)
 
 Use Docker Engine with Compose v2, Python 3, OpenSSL and a reserved LAN IPv4 address.
 Raspberry Pi installations require a 64-bit OS. Docker Desktop and routed/VLAN

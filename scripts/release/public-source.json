@@ -28,7 +28,7 @@
     "platform/frontend/src": [".ts", ".tsx", ".css"],
     "platform/frontend/test": [".ts"],
     "platform/shared": [".js", ".ts"],
-    "deploy/edge": [".yaml", ".sh", "Dockerfile"],
+    "deploy/edge": [".yaml", ".sh", ".py", "Dockerfile"],
     "deploy/supervisor": [".py", ".service", ".timer"],
     "deploy/tests": [".py"]
   }
