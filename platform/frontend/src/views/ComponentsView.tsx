@@ -426,7 +426,7 @@ export function ComponentsView({ parts, taxonomyParts = parts, onCreate, onClass
                   <Form.Item
                     label="Accu product code"
                     name="accuProductCode"
-                    extra="Paste the verified Accu code once; SmartWall will reuse it for future orders."
+                    extra="Paste the verified Accu code once; e-wall will reuse it for future orders."
                   >
                     <Input size="large" placeholder="For example: HSH-M5-20-A2" />
                   </Form.Item>

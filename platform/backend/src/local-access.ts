@@ -6,7 +6,7 @@ export function maintenanceMode() { return !!process.env.MAINTENANCE_FILE && exi
 export function validateLocalAccess() {
   const host = process.env.HTTP_HOST ?? '127.0.0.1';
   if (!administrator() && (process.env.NODE_ENV === 'production' || !['127.0.0.1','::1','localhost'].includes(host)) && setupCode().length < 20)
-    throw new Error('Set a unique setup code of at least 20 characters using SMARTWALL_ADMIN_PASSWORD_FILE before starting SmartWall');
+    throw new Error('Set a unique setup code of at least 20 characters using SMARTWALL_ADMIN_PASSWORD_FILE before starting e-wall');
 }
 export const localRequestGuard: RequestHandler = (request, response, next) => {
   if (!['GET','HEAD','OPTIONS'].includes(request.method)) {
@@ -23,7 +23,7 @@ export const localRequestGuard: RequestHandler = (request, response, next) => {
     }
   }
   if (maintenanceMode() && request.path.startsWith('/api/')) {
-    response.setHeader('Retry-After', '30'); response.status(503).json({ error: 'SmartWall is updating. Please retry shortly.' }); return;
+    response.setHeader('Retry-After', '30'); response.status(503).json({ error: 'e-wall is updating. Please retry shortly.' }); return;
   }
   next();
 };

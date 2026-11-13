@@ -42,7 +42,7 @@ export function ConnectWallModal({open,onClose,onConnected}:{open:boolean;onClos
     }
     setConnection(null);setError('');onClose();
   }
-  return <Modal title="Connect this wall to SmartWall Online" open={open} onCancel={()=>void close()} footer={<Button onClick={()=>void close()} disabled={starting}>{connection?.state==='connected'?'Done':'Cancel'}</Button>} destroyOnHidden>
+  return <Modal title="Connect this wall to e-wall Online" open={open} onCancel={()=>void close()} footer={<Button onClick={()=>void close()} disabled={starting}>{connection?.state==='connected'?'Done':'Cancel'}</Button>} destroyOnHidden>
     <Flex vertical gap={18}>
       <Typography.Paragraph>Sign in to the online portal as a company administrator, choose your wall and approve the connection. Sync settings are saved automatically on this station.</Typography.Paragraph>
       {error&&<Alert type="error" message={error} showIcon/>}

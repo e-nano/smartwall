@@ -1767,7 +1767,7 @@ void sendBrokerDiscovery(uint32_t now) {
   if (discoveryUdp.beginPacket(broadcastAddress, Product::DISCOVERY_SERVER_PORT)) {
     discoveryUdp.print(body);
     discoveryUdp.endPacket();
-    Serial.printf("[DISCOVERY] Looking for SmartWall on %s:%u\n",
+    Serial.printf("[DISCOVERY] Looking for e-wall on %s:%u\n",
                   broadcastAddress.toString().c_str(), Product::DISCOVERY_SERVER_PORT);
   }
   // A unicast probe makes reconnects work on Wi-Fi networks that suppress
@@ -1808,7 +1808,7 @@ void receiveBrokerDiscovery() {
   discoveryOfferReceived = true;
   mqttFailures = 0;
   lastMqttAttemptAt = millis() - Timing::MQTT_RECONNECT_INTERVAL_MS;
-  Serial.printf("[DISCOVERY] SmartWall found at %s:%u authentication=%s\n",
+  Serial.printf("[DISCOVERY] e-wall found at %s:%u authentication=%s\n",
                 config.mqttHost.c_str(), config.mqttPort,
                 discoveredAuthenticationRequired ? "required" : "open");
 }
@@ -1897,7 +1897,7 @@ extern "C" bool verifyRollbackLater() { return true; }
 void setup() {
   Serial.begin(115200);
   delay(80);
-  Serial.printf("\n[BOOT] Smart Stock Bin firmware %s starting\n",
+  Serial.printf("\n[BOOT] e-bin firmware %s starting\n",
                 Product::FIRMWARE_VERSION);
   Serial.println(Product::IMAGE_MARKER);
   Serial.println(Product::RELEASE_MARKER);

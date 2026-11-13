@@ -115,7 +115,7 @@ class Supervisor:
                     if data.get('ok') and (version is None or data.get('version') == version): return
             except (OSError, ValueError): pass
             time.sleep(2)
-        raise RuntimeError('SmartWall failed its readiness check')
+        raise RuntimeError('e-wall failed its readiness check')
 
     def recover(self):
         transaction = self.state.get('transaction')

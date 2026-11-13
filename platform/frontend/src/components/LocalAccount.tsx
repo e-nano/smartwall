@@ -54,8 +54,8 @@ function LoginScreen({ session, onSignedIn }: { session: Session; onSignedIn: (s
     } finally { setBusy(false); }
   };
   return <main className="local-auth-page">
-    <section className="local-auth-story" aria-label="About SmartWall">
-      <div className="local-auth-brand"><span><Boxes size={29} /></span>SmartWall</div>
+    <section className="local-auth-story" aria-label="About e-wall">
+      <div className="local-auth-brand"><span><Boxes size={29} /></span>e-wall</div>
       <div className="local-auth-story-copy"><div className="local-auth-eyebrow">YOUR WORKSHOP, CONNECTED</div><h1>Everything in<br />its place.</h1><p>Find the right component. Know what’s in stock.<br />Keep your workshop moving.</p></div>
       <div className="local-auth-local"><ShieldCheck size={20} /><span>Your inventory and account stay on this wall.</span></div>
     </section>
@@ -71,9 +71,9 @@ function LoginScreen({ session, onSignedIn }: { session: Session; onSignedIn: (s
           {setupRequired ? <PasswordFields /> : <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Enter your password' }]}><Input.Password autoComplete="current-password" maxLength={256} size="large" /></Form.Item>}
           <Button type="primary" htmlType="submit" block size="large" loading={busy} icon={<ArrowRight size={18} />} iconPlacement="end">{setupRequired ? 'Create account' : 'Sign in'}</Button>
         </Form>
-        <div className="local-auth-footer">Local access to this SmartWall. Your SmartWall Online account is separate.</div>
+        <div className="local-auth-footer">Local access to this e-wall. Your e-wall Online account is separate.</div>
       </div>
-      <span className="local-auth-maker">SmartWall by E-Nano</span>
+      <span className="local-auth-maker">e-wall by E-Nano</span>
     </section>
   </main>;
 }

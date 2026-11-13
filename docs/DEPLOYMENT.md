@@ -1,15 +1,15 @@
-# Deploying SmartWall
+# Deploying e-wall
 
 This package deploys the local **edge** installation beside the bins. E-Nano provides
-the optional commercial [SmartWall Online](https://smartwall.e-nano.io) service.
+the optional commercial [e-wall Online](https://smartwall.e-nano.io) service.
 Its source and deployment are private; no online portal server is distributed here.
 Keep an edge installation on each workshop LAN for UDP bin discovery.
 
 ## Start here
 
-The [SmartWall guide](https://smartwall.e-nano.io/guide.html) covers installation,
+The [e-wall guide](https://smartwall.e-nano.io/guide.html) covers installation,
 first login, bin setup, daily operation and optional online/ChatGPT connections.
-The public repository contains the local software and bin firmware. SmartWall
+The public repository contains the local software and bin firmware. e-wall
 Online is hosted by E-Nano and is not included in the Docker installation.
 
 The source is available today. There is **no approved signed release yet**; the
@@ -42,7 +42,7 @@ sudo cat /opt/smartwall-preview/runtime/secrets/admin_password
 On that host, open `http://127.0.0.1:8080`. Use the displayed setup code once and
 choose your own username and password. Keep the code private. The preparation
 script refuses an existing destination and assigns persistent files to container
-UID 1000. Stop an old SmartWall backend/MQTT broker first if it occupies ports
+UID 1000. Stop an old e-wall backend/MQTT broker first if it occupies ports
 1883, 8080, 8081 or UDP 4210; do not delete its data or containers.
 
 The source trial has no publisher key, signed update feed or privileged supervisor.
@@ -189,7 +189,7 @@ not a complete peripheral/network self-test or a guarantee against hangs. Test c
 power-loss and recovery behavior on both actual bootloaders before declaring stable.
 Hardware secure-boot fuses are not changed by these updates.
 
-## Connect to SmartWall Online
+## Connect to e-wall Online
 
 Open **Cloud sync → Connect this wall**, sign in at `https://smartwall.e-nano.io`
 as a company administrator and approve the displayed wall code. This enrolls the

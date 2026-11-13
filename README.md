@@ -1,11 +1,19 @@
-# SmartWall — local inventory and SmartBin firmware
+# e-wall — smart wall inventory and e-bin firmware
 
-Start with the [SmartWall user guide](https://smartwall.e-nano.io/guide.html),
+**e-wall** is E-Nano’s smart wall system for component inventory. **e-bin** is
+the connected smart bin that measures stock by weight. Product names are always
+lowercase; “smart wall” and “smart bin” remain descriptive terms.
+
+These are the current working product names. Existing repository URLs, package
+names, configuration keys and device protocols retain their original identifiers
+for compatibility with installed systems.
+
+Start with the [e-wall user guide](https://smartwall.e-nano.io/guide.html),
 [Docker source trial and installation](docs/DEPLOYMENT.md),
 [official release approvals](docs/RELEASING.md), [contributing](CONTRIBUTING.md), and [security](SECURITY.md).
 The community project covers the local operator interface, backend, bin firmware and
 approved software/firmware updates. E-Nano runs the optional commercial
-[SmartWall Online](https://smartwall.e-nano.io) service; its portal, server and hosting
+[e-wall Online](https://smartwall.e-nano.io) service; its portal, server and hosting
 infrastructure are private and are not distributed with this project. The local
 software works without an online account. Developers may implement their own
 compatible service using the local integration code.
@@ -16,7 +24,7 @@ grant an open-source licence. Official Docker/firmware releases remain disabled
 until licensing and release approval settings are completed.
 See [public/private source separation](docs/RELEASING.md#public-and-private-source).
 
-PlatformIO firmware for both the manufactured **Smart Bin Integrated Controller Rev 0.2** and the original **ELEGOO ESP32 DevKit** prototype. The two targets share the application code but retain their own processor, GPIO and LED configuration.
+PlatformIO firmware for both the manufactured **e-bin Integrated Controller Rev 0.2** and the original **ELEGOO ESP32 DevKit** prototype. The two targets share the application code but retain their own processor, GPIO and LED configuration.
 
 ## Implemented prototype behavior
 
@@ -35,7 +43,7 @@ The local React/TypeScript operator platform is in [platform](platform/README.md
 
 ## Integrated board pinout
 
-These GPIOs come from the Smart Bin Rev 0.2 KiCad schematic and the ESP32-S3-WROOM-1 module pin table:
+These GPIOs come from the e-bin Rev 0.2 KiCad schematic and the ESP32-S3-WROOM-1 module pin table:
 
 | Function | Schematic net | U1 module pin | ESP32-S3 GPIO |
 |---|---|---:|---:|
@@ -100,7 +108,7 @@ example `./scripts/compile-firmware.sh 0.4.0`.
 2. Scan the Wi-Fi QR code on the e-ink screen to join `SmartStock-BIN-xxxxxx` automatically. If the phone cannot scan Wi-Fi QR codes, connect manually using password `smartstock`.
 3. If the captive page does not open automatically, browse to `http://192.168.4.1/`.
 4. Optionally tare the empty, settled bin. Add a known mass, enter its weight in grams and press **Calibrate with mass fitted**. Neither action is required for Wi-Fi setup.
-5. Select Wi-Fi and enter its password. The bin broadcasts a local UDP discovery request and automatically learns the SmartWall MQTT address and port. Broker and OTA settings remain available under **Advanced connection settings**.
+5. Select Wi-Fi and enter its password. The bin broadcasts a local UDP discovery request and automatically learns the e-wall MQTT address and port. Broker and OTA settings remain available under **Advanced connection settings**.
 6. Select **Save & Connect**. The ESP32 restarts, closes the setup AP, connects, updates the label and starts MQTT telemetry and command subscriptions.
 
 The default setup AP password is intentionally simple for bench commissioning. Change `Product::AP_PASSWORD` in `include/SmartWallConfig.h` and add stronger onboarding/access control before deployment.
@@ -142,6 +150,6 @@ Signed artifacts and release approval are documented in [RELEASING.md](docs/RELE
 ## Current prototype assumptions
 
 - The prototype uses trusted-LAN MQTT on port `1883`, UDP discovery on port `4210`, and HTTP for remote OTA downloads. MQTT accepts newly discovered bins without credentials by default. **Updates → Automatic bin connection** can require the configured MQTT username and password. Production requires MQTT over TLS, HTTPS, broker ACLs and signed firmware.
-- GPIO0/SW2 is the recovery input on Smart Bin Rev 0.2; SW1 is the hardware reset input and is not read by firmware.
+- GPIO0/SW2 is the recovery input on e-bin Rev 0.2; SW1 is the hardware reset input and is not read by firmware.
 - The load-cell wiring, e-paper operation and measurement accuracy still need bench validation on the assembled board.
 - E-paper refreshes happen only at persistent state transitions (setup, connected/assignment, explicit refresh), not on each live sample.

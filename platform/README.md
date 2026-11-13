@@ -1,4 +1,4 @@
-# SmartWall local platform
+# e-wall local platform
 
 For production packaging, start with [Docker deployment](../docs/DEPLOYMENT.md) and
 [release approvals](../docs/RELEASING.md). The Compose file in this directory remains
@@ -6,7 +6,7 @@ the legacy development broker; the full deployment is `deploy/edge/compose.yaml`
 
 
 Local React/TypeScript operator interface and TypeScript control plane for the
-SmartWall ESP32 bins. SQLite stores bins, parts, observed inventory changes,
+e-bin ESP32 smart bins. SQLite stores bins, parts, observed inventory changes,
 commands and firmware releases. MQTT carries live device traffic; the browser
 receives changes over server-sent events.
 
@@ -15,7 +15,7 @@ receives changes over server-sent events.
 - React/Vite development UI: `http://127.0.0.1:5173`
 - Production UI and operator API: `http://127.0.0.1:8080` (workstation only)
 - MQTT broker: LAN port `1883` (open to LAN bins by default)
-- SmartWall discovery: LAN UDP port `4210`
+- e-wall discovery: LAN UDP port `4210`
 - Signed OTA downloads: LAN port `8081`
 - SQLite database: `data/smartwall.db`
 - Uploaded images: `firmware/`
@@ -96,7 +96,7 @@ guide for public-key provisioning, manual updates and current rollback validatio
 
 ## Optional local-first cloud mirror
 
-SmartWall remains fully operational on the local workstation. SQLite is the
+e-wall remains fully operational on the local workstation. SQLite is the
 authoritative database, MQTT and OTA stay on the LAN, and no ESP32 depends on an
 internet connection. An optional worker mirrors business records to E-Nano's
 commercial hosted service whenever internet access is available.
@@ -126,7 +126,7 @@ computer.
 
 Cloud synchronization is disabled until the wall is configured. Open
 **Cloud sync → Connect this wall** on the local station to connect to
-[SmartWall Online](https://smartwall.e-nano.io).
+[e-wall Online](https://smartwall.e-nano.io).
 Sign in in the separate online tab as a company administrator, check the code,
 and approve a named wall. Settings are saved automatically and synchronization
 starts immediately. Private settings and the backup key are retained in
@@ -165,9 +165,9 @@ For local startup at boot, copy
 `/etc/systemd/system/smartwall-platform.service`, review the paths and user, then
 enable it with systemd. The MQTT container already uses `restart: unless-stopped`.
 
-## Optional SmartWall Online service
+## Optional e-wall Online service
 
-E-Nano operates [SmartWall Online](https://smartwall.e-nano.io) as a commercial
+E-Nano operates [e-wall Online](https://smartwall.e-nano.io) as a commercial
 hosted service for company accounts, multiple walls, remote inventory and AI
 integration. Its frontend, server and infrastructure remain private. This package
 contains the local software and the integration client only. Developers may build

@@ -57,7 +57,7 @@ export function OrdersView({ parts, onOpenComponents }: OrdersViewProps) {
 
   const downloadCsv = () => {
     const rows = [
-      ["Accu product code", "Quantity", "SmartWall component", "Current stock", "Reorder level"],
+      ["Accu product code", "Quantity", "e-wall component", "Current stock", "Reorder level"],
       ...readyLines.map((part) => [
         part.accu_product_code,
         part.accu_order_quantity,
@@ -109,7 +109,7 @@ export function OrdersView({ parts, onOpenComponents }: OrdersViewProps) {
               showIcon
               type="info"
               message="Accu does not support a pre-filled Quick Order link"
-              description="Use Copy & open Accu. SmartWall copies the prepared product-code and quantity rows, then opens Accu. Paste them into the project and verify the quantities before checkout."
+              description="Use Copy & open Accu. e-wall copies the prepared product-code and quantity rows, then opens Accu. Paste them into the project and verify the quantities before checkout."
               className="form-alert"
             />
 

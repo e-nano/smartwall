@@ -21,7 +21,7 @@ constexpr uint8_t EPD_BUSY = 4;   // D4
 constexpr uint8_t BIN_LED = 27;      // D27 / one WS2812E DIN
 constexpr uint8_t SETUP_BUTTON = 0;  // BOOT
 #elif defined(SMARTWALL_BOARD_INTEGRATED_REV02)
-// Smart Bin integrated controller Rev 0.2. These GPIOs come from the
+// e-bin integrated controller Rev 0.2. These GPIOs come from the
 // manufactured KiCad schematic and the ESP32-S3-WROOM-1-N8 module pins.
 constexpr uint8_t HX711_DT = 4;   // U1 pin 4 / HX_DOUT
 constexpr uint8_t HX711_SCK = 5;  // U1 pin 5 / HX_SCK
@@ -36,7 +36,7 @@ constexpr uint8_t EPD_BUSY = 7;   // U1 pin 7 / EPD_BUSY
 constexpr uint8_t BIN_LED = 6;       // U1 pin 6 / LED_DATA_3V3 via U4 and R11
 constexpr uint8_t SETUP_BUTTON = 0;  // U1 pin 27 / ESP_BOOT / SW2
 #else
-#error "Select a supported SmartWall board environment in platformio.ini"
+#error "Select a supported e-wall board environment in platformio.ini"
 #endif
 }  // namespace Pins
 

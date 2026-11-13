@@ -1,5 +1,5 @@
 [Unit]
-Description=Check SmartWall update requests
+Description=Check e-wall update requests
 [Timer]
 OnBootSec=2min
 OnUnitInactiveSec=1min

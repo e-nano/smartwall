@@ -24,12 +24,12 @@ export function SoftwareUpdates() {
     finally{setBusy(false);}
   }
   const candidate=status?.supervisor?.candidate;
-  return <Card title="SmartWall software updates" style={{marginBottom:12}}>
+  return <Card title="e-wall software updates" style={{marginBottom:12}}>
     <Flex vertical gap={12}>
       <Typography.Text>Installed version: {status?.version ?? 'Checking…'}</Typography.Text>
       {!status?.configured && <Typography.Text type="secondary">Configure an official release source during installation to check for updates.</Typography.Text>}
       {candidate && <Typography.Text>Available release: {candidate.version} ({candidate.channel})</Typography.Text>}
-      {status?.supervisor?.state==='installing' && <Alert type="info" message="Updating SmartWall. Stock changes are temporarily paused." />}
+      {status?.supervisor?.state==='installing' && <Alert type="info" message="Updating e-wall. Stock changes are temporarily paused." />}
       {status?.supervisor?.error && <Alert type="error" message={status.supervisor.error} />}
       <Flex gap={8} wrap>
         <Button disabled={!status?.configured || busy} onClick={()=>void action('check')}>Check for updates</Button>

@@ -21,7 +21,7 @@ else
   exit 1
 fi
 
-echo "Building SmartWall DevKit firmware $version..."
+echo "Building e-wall DevKit firmware $version..."
 "$pio_bin" run --project-dir "$project_dir" --environment elegoo_esp32
 
 if [[ ! -s "$build_output" ]]; then

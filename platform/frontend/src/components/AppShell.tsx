@@ -58,7 +58,7 @@ export function AppShell({
   onCloudSyncNow
 }: AppShellProps) {
   const [connectOpen,setConnectOpen]=useState(false);
-  const activeTitle = navigation.find((item) => item.key === view)?.label ?? "SmartWall";
+  const activeTitle = navigation.find((item) => item.key === view)?.label ?? "e-wall";
   const searchable = view === "bins" || view === "catalog";
   const sync = data.cloudSync;
   const syncLabel = !sync.available
@@ -140,9 +140,9 @@ export function AppShell({
   return (
     <Layout className="smart-shell" hasSider>
       <Sider className="smart-sider" width={184} breakpoint="md" collapsedWidth={80} theme="dark" aria-label="Primary navigation">
-        <div className="brand-mark" aria-label="SmartWall"><Boxes size={23} /></div>
+        <div className="brand-mark" aria-label="e-wall"><Boxes size={23} /></div>
         <Menu
-          aria-label="SmartWall sections"
+          aria-label="e-wall sections"
           className="smart-menu"
           theme="dark"
           mode="inline"
@@ -158,7 +158,7 @@ export function AppShell({
           href="https://e-nano.io"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="SmartWall by E-Nano"
+          aria-label="e-wall by E-Nano"
         >
           <img src="/assets/e-nano-logo.svg" alt="E-Nano Robotics" width="422" height="107" />
           <span>by E-Nano</span>

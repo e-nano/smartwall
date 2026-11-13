@@ -483,7 +483,7 @@ export function startServers() {
   const apiHost = process.env.HTTP_HOST ?? "127.0.0.1";
   const firmwareHost = process.env.FIRMWARE_HOST ?? "0.0.0.0";
   api.listen(apiPort, apiHost, () => {
-    console.log(`[HTTP] SmartWall UI and API: http://${apiHost}:${apiPort}`);
+    console.log(`[HTTP] e-wall UI and API: http://${apiHost}:${apiPort}`);
   });
   firmwareServer.listen(firmwarePort, firmwareHost, () => {
     console.log(`[OTA] Signed firmware downloads: http://${firmwareHost}:${firmwarePort}`);

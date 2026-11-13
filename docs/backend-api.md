@@ -1,4 +1,4 @@
-# Smart Stock Bin MQTT contract (v2)
+# e-bin MQTT contract (v2)
 
 The ESP32 maintains one MQTT connection to the inventory platform's broker. There
 is no command polling. Configure the broker host, port and optional username and

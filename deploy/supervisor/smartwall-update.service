@@ -1,5 +1,5 @@
 [Unit]
-Description=Verify and apply approved SmartWall releases
+Description=Verify and apply approved e-wall releases
 After=docker.service network-online.target
 Requires=docker.service
 

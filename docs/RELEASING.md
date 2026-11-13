@@ -11,7 +11,7 @@ pending. Source visibility alone does not grant an open-source licence.
 
 The community repository contains the local operator interface, local backend,
 ESP32 firmware, update supervisor and the client for E-Nano's hosted service.
-SmartWall Online is E-Nano's commercial service. Its portal frontend, server, MCP
+e-wall Online is E-Nano's commercial service. Its portal frontend, server, MCP
 server implementation, account management and hosting infrastructure remain private.
 Public local code can be used to develop an independent compatible service.
 

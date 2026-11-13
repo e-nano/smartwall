@@ -340,7 +340,7 @@ function SmartWallApplication() {
     }
     modal.confirm({
       title: "Enable cloud sync?",
-      content: "Parts, bin state, inventory history, firmware metadata, and encrypted SQLite backups will be sent to the configured SmartWall cloud project.",
+      content: "Parts, bin state, inventory history, firmware metadata, and encrypted SQLite backups will be sent to the configured e-wall cloud project.",
       okText: "Enable sync",
       cancelText: "Keep paused",
       okButtonProps: { size: "large" },
@@ -363,7 +363,7 @@ function SmartWallApplication() {
     return (
       <Flex className="loading-screen" vertical align="center" justify="center" gap={14}>
         <Spin size="large" />
-        <Text>Connecting to SmartWall...</Text>
+        <Text>Connecting to e-wall...</Text>
       </Flex>
     );
   }

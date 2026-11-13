@@ -14,7 +14,7 @@ export function createCloudConnectRouter(){
   // from starting or confirming a connection through the station API.
   router.use((request,response,next)=>{
     const origin=request.get('origin');
-    if(!origin) return response.status(403).json({error:'Open the local SmartWall page to connect'});
+    if(!origin) return response.status(403).json({error:'Open the local e-wall page to connect'});
     let hostname;try{hostname=new URL(origin).hostname;}catch{return response.status(403).json({error:'Invalid request origin'});}
     let host:string;try{host=new URL('http://'+request.get('host')).hostname;}catch{return response.status(403).json({error:'Invalid host'});}
     if(hostname!==host && !(['localhost','127.0.0.1','[::1]'].includes(hostname)&&['localhost','127.0.0.1','[::1]'].includes(host))) return response.status(403).json({error:'Invalid request origin'});

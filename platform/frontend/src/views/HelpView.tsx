@@ -64,7 +64,7 @@ const deviceStates: GuideItem[] = [
   {
     title: "Wall or MQTT unavailable",
     signal: "Alternating red lights",
-    description: "Wi-Fi is available, but the bin cannot reach the SmartWall service. Check the local platform and network.",
+    description: "Wi-Fi is available, but the bin cannot reach the e-wall service. Check the local platform and network.",
     tone: "red",
     pattern: "alternate",
     icon: <TriangleAlert size={21} />
@@ -166,10 +166,10 @@ function GuideGrid({ items }: { items: GuideItem[] }) {
 
 export function HelpView() {
   return (
-    <section className="page-content help-page" aria-label="SmartWall help">
+    <section className="page-content help-page" aria-label="e-wall help">
       <Card className="help-intro-card">
         <Flex vertical gap={10}>
-          <Text className="card-label">Smart bin light guide</Text>
+          <Text className="card-label">smart bin light guide</Text>
           <Title level={2}>What the LED colours mean</Title>
           <Paragraph>
             The bin lights show connection state, stock activity and guided actions at a glance. The integrated board uses
@@ -201,13 +201,13 @@ export function HelpView() {
               <li>Power on the bin. A blue blink means it is ready for Wi-Fi setup.</li>
               <li>Scan the QR code on the e-ink display and join the bin network.</li>
               <li>Enter the workshop Wi-Fi details in the setup page.</li>
-              <li>After the bin joins the same local network, SmartWall discovers it automatically.</li>
+              <li>After the bin joins the same local network, e-wall discovers it automatically.</li>
             </ol>
             <Alert
               showIcon
               type="info"
               message="Manual setup fallback"
-              description={<>Join the displayed SmartWall network with password <Text code>smartstock</Text>, then open <Text code>http://192.168.4.1</Text>.</>}
+              description={<>Join the setup network shown on your smart bin with password <Text code>smartstock</Text>, then open <Text code>http://192.168.4.1</Text>.</>}
             />
           </Card>
         </Col>
@@ -215,7 +215,7 @@ export function HelpView() {
           <Card title="If a light stays on" className="help-detail-card">
             <div className="help-troubleshooting">
               <div><span className="help-colour-dot amber" /><Text><strong>Amber:</strong> confirm the saved Wi-Fi name and password, and check signal strength.</Text></div>
-              <div><span className="help-colour-dot red" /><Text><strong>Red:</strong> make sure the SmartWall local platform and MQTT service are running on the same network.</Text></div>
+              <div><span className="help-colour-dot red" /><Text><strong>Red:</strong> make sure the e-wall local platform and MQTT service are running on the same network.</Text></div>
               <div><span className="help-colour-dot blue" /><Text><strong>Blue setup blink:</strong> complete Wi-Fi setup from the QR code shown on the bin.</Text></div>
               <div><span className="help-colour-dot violet" /><Text><strong>Violet:</strong> wait for startup, calibration or the firmware update to finish before moving the bin.</Text></div>
             </div>

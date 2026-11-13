@@ -1,4 +1,4 @@
-# Contributing to SmartWall
+# Contributing to e-wall
 
 Use issues to report reproducible problems and propose changes, and pull requests
 for code, documentation and hardware support. Include the affected board, software

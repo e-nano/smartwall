@@ -9,7 +9,7 @@ static const char PORTAL_HTML[] PROGMEM = R"HTML(
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Smart Stock Bin Setup</title>
+  <title>e-bin Setup</title>
   <style>
     :root{font-family:system-ui,sans-serif;color:#17212b;background:#eef3f7}
     body{margin:0;padding:18px}.wrap{max-width:680px;margin:auto}.card{background:#fff;border-radius:16px;padding:18px;margin:12px 0;box-shadow:0 3px 18px #16324a18}
@@ -22,7 +22,7 @@ static const char PORTAL_HTML[] PROGMEM = R"HTML(
   </style>
 </head>
 <body><div class="wrap">
-  <div class="card"><h1>Smart Stock Bin</h1><div id="identity" class="muted">Loading device identity…</div><div class="muted">MQTT: <span id="mqttState">checking…</span></div><p><span id="state" class="pill">Loading</span></p></div>
+  <div class="card"><h1>e-bin</h1><div id="identity" class="muted">Loading device identity…</div><div class="muted">MQTT: <span id="mqttState">checking…</span></div><p><span id="state" class="pill">Loading</span></p></div>
   <div class="card"><h2>Load cell setup</h2><div class="reading"><span id="weight">—</span> <span id="weightUnit">g</span></div>
     <div class="muted">Raw ADC: <span id="raw">—</span> · Tare offset: <span id="tareOffset">—</span> · Net: <span id="netRaw">—</span> counts</div>
     <div class="muted">Filtered net: <span id="filteredNet">collecting…</span> · Samples: <span id="filterSamples">0/30</span> · Noise: <span id="noise">—</span> · <span id="stability">settling</span></div>
@@ -36,7 +36,7 @@ static const char PORTAL_HTML[] PROGMEM = R"HTML(
   <div class="card"><h2>Connect to Wi-Fi</h2>
     <form id="configForm"><label for="ssid">Wi-Fi network</label><div class="grid"><select id="ssid" name="ssid" required><option value="">Scan to choose…</option></select><button type="button" class="secondary" onclick="scan()" style="margin-top:0">Scan</button></div>
       <label for="password">Wi-Fi password</label><input id="password" name="password" type="password" autocomplete="new-password" placeholder="Leave blank for an open network">
-      <p class="muted">The bin discovers the SmartWall station automatically after joining the same local network.</p>
+      <p class="muted">The bin discovers the e-wall station automatically after joining the same local network.</p>
       <details><summary>Advanced connection settings</summary>
         <label for="mqttHost">MQTT broker host or IP (optional fallback)</label><input id="mqttHost" name="mqttHost" placeholder="Discovered automatically">
         <label for="mqttPort">MQTT port</label><input id="mqttPort" name="mqttPort" type="number" min="1" max="65535" value="1883">

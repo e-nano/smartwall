@@ -1,4 +1,4 @@
-"""Shared publication boundary for the local SmartWall community project."""
+"""Shared publication boundary for the local e-wall community project."""
 import json
 import re
 from pathlib import Path, PurePosixPath

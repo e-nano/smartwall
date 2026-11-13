@@ -69,7 +69,7 @@ export function startDiscovery() {
     console.error(`[DISCOVERY] UDP service error: ${error.message}`);
   });
   socket.bind(port, host, () => {
-    console.log(`[DISCOVERY] SmartWall broker discovery: udp://${host}:${port}`);
+    console.log(`[DISCOVERY] e-wall broker discovery: udp://${host}:${port}`);
   });
   return socket;
 }
