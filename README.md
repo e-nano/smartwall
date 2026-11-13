@@ -26,13 +26,26 @@ See [public/private source separation](docs/RELEASING.md#public-and-private-sour
 
 PlatformIO firmware for both the manufactured **e-bin Integrated Controller Rev 0.2** and the original **ELEGOO ESP32 DevKit** prototype. The two targets share the application code but retain their own processor, GPIO and LED configuration.
 
+## Current development status — 13 November 2026
+
+- The local Docker application uses the **e-wall** branding. Deployment checks
+  verified the login screen, existing inventory/account preservation, MQTT
+  reconnection and synchronization with the optional hosted service.
+- **e-bin 0.3.13** compiled successfully for both ESP32-S3 integrated Rev 0.2 and
+  ESP32 DevKit. These are development candidates, not approved signed OTA releases.
+- Validation passed: 33 local integration tests, 17 deployment tests, TypeScript
+  checks, and GitHub CI for the platform and both firmware targets.
+- To evaluate the current software, follow the [Docker source trial](docs/DEPLOYMENT.md#source-trial-available-now).
+  Official downloadable Docker/firmware releases still require the licence,
+  signing and release-approval setup described in [Releasing](docs/RELEASING.md).
+
 ## Implemented prototype behavior
 
 - Stable Bin ID derived from the ESP32 eFuse MAC and persisted in NVS.
 - HX711 acquisition, filtered weight, stable-sample tare, calibration and persisted tare/scale.
 - Continuous 10 Hz weighing with a five-second trimmed filter, stable quantity detection and immediate change telemetry.
 - Large-format 1.54-inch e-paper label with readable Bin ID, part name, prominent quantity and current weight.
-- Five WS2812B-2020 LEDs use their physical cross layout for boot, connecting, success, fault, tare and OTA animations. On every boot, a short centre/top/right/bottom/left self-test lights all five LEDs before peripheral initialization. Picks collapse blue into the centre, restocks expand green outwards, Find rotates amber around the centre, and a dim cyan centre heartbeat remains visible while idle. Captive-portal Setup Mode uses a clear 500 ms blue on/off blink.
+- Five WS2812B-2020 LEDs use their physical cross layout for boot, connecting, success, fault, tare and OTA animations. On every boot, a short centre/top/right/bottom/left self-test lights all five LEDs before peripheral initialization. Picks collapse blue into the centre, restocks expand green outwards, Find rotates amber around the centre, and the LEDs remain off while ready. The e-ink screen continues to show the bin status. Captive-portal Setup Mode uses a clear 500 ms blue on/off blink.
 - Automatic Wi-Fi reconnect and fallback to captive Setup Mode after a timeout.
 - Captive portal with network scan, Wi-Fi and MQTT broker settings, live weight, optional tare and Find test.
 - Recovery without reflashing: hold the board's **BOOT** button for four seconds during startup, or use **Clear Wi-Fi & restart setup** in the maintenance page.
